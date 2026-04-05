@@ -1,0 +1,295 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Unbounded', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  --color-bg: #07070c;
+  --color-surface: #101018;
+  --color-text: #f4f4f8;
+  --color-accent: #ff3d6e;
+  /* чуть светлее для читаемости ссылок на тёмном фоне */
+  --color-accent-2: #5cffea;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+}
+
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-body {
+    font-family: var(--font-body);
+  }
+
+  .nav-link {
+    @apply rounded-lg px-2.5 py-3 text-[0.8125rem] font-medium text-white/80 transition hover:bg-white/5 hover:text-white md:py-2 lg:px-3 lg:text-sm;
+  }
+
+  /* Секционные заголовки — Manrope, без тяжёлого display на всю страницу */
+  .section-title {
+    font-family: var(--font-body);
+    @apply text-3xl font-bold tracking-tight text-white md:text-4xl;
+  }
+
+  .link-accent {
+    @apply font-semibold text-[var(--color-accent-2)] underline decoration-white/20 underline-offset-[0.2em] transition hover:decoration-[var(--color-accent-2)] hover:brightness-110;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center rounded-full bg-[var(--color-accent)] px-8 py-3.5 text-sm font-semibold text-[var(--color-bg)] shadow-lg shadow-[var(--color-accent)]/25 transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-2)];
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-8 py-3.5 text-sm font-semibold text-white transition hover:border-[var(--color-accent-2)]/50 hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-accent-2)];
+  }
+
+  .contact-card {
+    @apply flex items-center gap-4 rounded-2xl border border-white/10 bg-[var(--color-surface)] p-4 transition hover:border-[var(--color-accent)]/40 hover:bg-white/[0.04];
+  }
+
+  .contact-card svg {
+    @apply h-10 w-10 shrink-0 text-[var(--color-accent-2)];
+  }
+}
+
+.hero-glow {
+  background:
+    radial-gradient(ellipse 80% 50% at 70% -20%, rgba(255, 61, 110, 0.35), transparent),
+    radial-gradient(ellipse 60% 40% at 10% 60%, rgba(92, 255, 234, 0.1), transparent);
+}
+
+/* Мягкое вписывание портрета с белым фоном в тёмную тему */
+.hero-photo-frame {
+  position: relative;
+  isolation: isolate;
+}
+
+.hero-photo-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: inherit;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.09),
+    inset 0 0 48px 12px rgb(7 7 12 / 0.35),
+    inset 0 -24% 50% -15% rgb(7 7 12 / 0.5);
+}
+
+.hero-photo-frame img {
+  position: relative;
+  z-index: 0;
+}
+
+/* Спокойные аккорды секций */
+.section-band {
+  background-color: var(--color-surface);
+}
+
+.section-band-muted {
+  background: linear-gradient(
+    180deg,
+    rgb(255 255 255 / 0.02) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgb(255 255 255 / 0.02) 100%
+  );
+}
+
+/* Раскрывающийся блок (фестивали) */
+.festivals-details summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.festivals-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.festivals-details summary::after {
+  content: ' ▾';
+  font-size: 0.75em;
+  opacity: 0.7;
+}
+
+.festivals-details[open] summary::after {
+  content: ' ▴';
+}
+
+/* Две колонки «О преподавателе»: без узкой правой полосы и огромного зазора */
+.about-two-col {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .about-two-col {
+    column-gap: 2.25rem;
+  }
+}
+
+/* Боковой блок «для кого» — без тяжёлой карточки, в тон основному тексту */
+.about-audience {
+  position: relative;
+  margin-top: 0.25rem;
+  padding: 0.75rem 0 0.25rem 1.125rem;
+  border-left: 2px solid rgb(255 61 110 / 0.28);
+  background: linear-gradient(
+    90deg,
+    rgb(255 61 110 / 0.045) 0%,
+    transparent 72%
+  );
+}
+
+@media (min-width: 1024px) {
+  .about-audience {
+    padding-top: 0.75rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.about-quote {
+  margin-top: 0.5rem;
+}
+
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(1.25rem);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-carousel {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .gallery-carousel {
+    gap: 0.75rem;
+  }
+}
+
+.gallery-carousel-btn {
+  display: none;
+  flex-shrink: 0;
+  align-self: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  background: rgb(255 255 255 / 0.06);
+  color: rgb(255 255 255 / 0.85);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+}
+
+.gallery-carousel-btn:hover:not(:disabled) {
+  background: rgb(255 255 255 / 0.12);
+  border-color: rgb(0 232 213 / 0.45);
+  color: #fff;
+}
+
+.gallery-carousel-btn:disabled {
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .gallery-carousel-btn {
+    display: flex;
+  }
+}
+
+.gallery-track {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  /* мягче, чем mandatory: доводит до карточки, не «рвёт» жест */
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 0;
+  padding-bottom: 0;
+  outline: none;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.gallery-track::-webkit-scrollbar {
+  display: none;
+}
+
+.gallery-track:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-accent-2);
+  border-radius: 0.75rem;
+}
+
+/* ~3 карточки на экране (lg), 2 на планшете, с «peek» на мобильном */
+.gallery-track .gallery-item {
+  flex: 0 0 calc((100% - 2 * 0.75rem) / 3);
+  min-width: 0;
+  max-width: calc((100% - 2 * 0.75rem) / 3);
+  scroll-snap-align: start;
+  aspect-ratio: 4 / 3;
+}
+
+@media (max-width: 1023.98px) {
+  .gallery-track .gallery-item {
+    flex-basis: calc((100% - 0.75rem) / 2);
+    max-width: calc((100% - 0.75rem) / 2);
+  }
+}
+
+@media (max-width: 639.98px) {
+  .gallery-track .gallery-item {
+    flex-basis: 82%;
+    max-width: 82%;
+  }
+}
+
+.gallery-item {
+  cursor: zoom-in;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  text-align: left;
+}
+
+.gallery-item img {
+  display: block;
+}
+
+@media (max-width: 767.98px) {
+  #nav-menu.is-open {
+    display: flex !important;
+  }
+}
