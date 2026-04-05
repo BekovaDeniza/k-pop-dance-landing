@@ -19,6 +19,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Дублируем на уровне job; vite.config также берёт base из GITHUB_REPOSITORY
+      GITHUB_PAGES_BASE: /k-pop-dance-landing/
     steps:
       - uses: actions/checkout@v4
 
@@ -28,8 +31,6 @@ jobs:
           cache: npm
 
       - name: Install and build
-        env:
-          GITHUB_PAGES_BASE: /k-pop-dance-landing/
         run: |
           npm ci
           npm run build
