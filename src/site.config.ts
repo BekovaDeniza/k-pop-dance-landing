@@ -4,16 +4,16 @@
  */
 export const siteConfig = {
   meta: {
-    title: 'K-pop танцы в Москве для подростков | Алёна Башмакова',
+    title: 'K-pop танцы в Москве | Алёна Башмакова',
     description:
-      'Групповые занятия K-pop у м. Медведково: 2 месяца, фестиваль и съёмка dance public. Преподаватель Алёна Башмакова — шоу-балет, фестивали, кавер-команда SMASH.',
+      'Групповые занятия K-pop у м. Медведково (ориентир по возрасту от 12–13 лет): 2 месяца, фестиваль и съёмка dance public. Преподаватель Алёна Башмакова — шоу-балет, фестивали, кавер-команда SMASH.',
     ogImage: '/media/teacher.JPG',
     siteUrl: 'https://example.com',
   },
 
   brand: {
     shortName: 'K-pop Moscow',
-    tagline: 'Танцы K-pop для подростков',
+    tagline: 'Танцы K-pop в Москве',
   },
 
   instructor: {

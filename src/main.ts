@@ -1,6 +1,11 @@
 import './style.css'
 import { siteConfig } from './site.config'
 
+/** Пути к файлам из `public/` с учётом `base` (GitHub Pages: /repo/). */
+function publicUrl(path: string): string {
+  return `${import.meta.env.BASE_URL}${path.replace(/^\/+/, '')}`
+}
+
 function formatRub(n: number): string {
   return `${new Intl.NumberFormat('ru-RU').format(n)} ₽`
 }
@@ -142,13 +147,13 @@ function initFooter(): void {
 function initHeroAndStudio(): void {
   const heroImg = document.getElementById('hero-photo') as HTMLImageElement | null
   if (heroImg) {
-    heroImg.src = siteConfig.media.heroTeacher
+    heroImg.src = publicUrl(siteConfig.media.heroTeacher)
     heroImg.alt = `${siteConfig.instructor.nameShort} — преподаватель K-pop`
   }
 
   const studioImg = document.getElementById('studio-photo') as HTMLImageElement | null
   if (studioImg) {
-    studioImg.src = siteConfig.media.studio
+    studioImg.src = publicUrl(siteConfig.media.studio)
     studioImg.alt = 'Зал для занятий: зеркала и свет у м. Медведково'
   }
 }
@@ -156,11 +161,11 @@ function initHeroAndStudio(): void {
 function initVideo(): void {
   const video = document.getElementById('cover-video') as HTMLVideoElement | null
   if (!video) return
-  video.poster = siteConfig.media.videoPoster
+  video.poster = publicUrl(siteConfig.media.videoPoster)
   video.replaceChildren(
     ...siteConfig.media.videoSources.map((spec) => {
       const s = document.createElement('source')
-      s.src = spec.src
+      s.src = publicUrl(spec.src)
       s.type = spec.type
       return s
     }),
@@ -172,14 +177,15 @@ function renderGalleryGrid(containerId: string, urls: readonly string[], altPref
   const el = document.getElementById(containerId)
   if (!el) return
   el.innerHTML = urls
-    .map(
-      (src, i) => `
-    <button type="button" class="gallery-item group relative h-full w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-2)]" data-gallery-src="${src}" data-gallery-alt="${altPrefix} — ${i + 1}">
-      <img src="${src}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+    .map((src, i) => {
+      const href = publicUrl(src)
+      return `
+    <button type="button" class="gallery-item group relative h-full w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-2)]" data-gallery-src="${href}" data-gallery-alt="${altPrefix} — ${i + 1}">
+      <img src="${href}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
       <span class="sr-only">Открыть в полный размер</span>
     </button>
-  `,
-    )
+  `
+    })
     .join('')
 }
 
