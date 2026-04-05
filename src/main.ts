@@ -160,17 +160,38 @@ function initHeroAndStudio(): void {
 
 function initVideo(): void {
   const video = document.getElementById('cover-video') as HTMLVideoElement | null
-  if (!video) return
-  video.poster = publicUrl(siteConfig.media.videoPoster)
-  video.replaceChildren(
-    ...siteConfig.media.videoSources.map((spec) => {
-      const s = document.createElement('source')
-      s.src = publicUrl(spec.src)
-      s.type = spec.type
-      return s
-    }),
+  const section = document.getElementById('video-cover')
+  if (!video || !section) return
+
+  /** Видео и постер тяжёлые (~десятки МБ) — не тянем, пока блок не у окна просмотра */
+  const attachAndPlay = (): void => {
+    video.poster = publicUrl(siteConfig.media.videoPoster)
+    video.replaceChildren(
+      ...siteConfig.media.videoSources.map((spec) => {
+        const s = document.createElement('source')
+        s.src = publicUrl(spec.src)
+        s.type = spec.type
+        return s
+      }),
+    )
+    video.load()
+    void video.play().catch(() => {})
+  }
+
+  if (typeof IntersectionObserver === 'undefined') {
+    attachAndPlay()
+    return
+  }
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return
+      io.disconnect()
+      attachAndPlay()
+    },
+    { rootMargin: '180px 0px', threshold: 0.02 },
   )
-  video.load()
+  io.observe(section)
 }
 
 function renderGalleryGrid(containerId: string, urls: readonly string[], altPrefix: string): void {
@@ -181,7 +202,7 @@ function renderGalleryGrid(containerId: string, urls: readonly string[], altPref
       const href = publicUrl(src)
       return `
     <button type="button" class="gallery-item group relative h-full w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--color-accent-2)]" data-gallery-src="${href}" data-gallery-alt="${altPrefix} — ${i + 1}">
-      <img src="${href}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" />
+      <img src="${href}" alt="" class="h-full w-full object-cover transition duration-500 group-hover:scale-105" loading="lazy" decoding="async" fetchpriority="low" />
       <span class="sr-only">Открыть в полный размер</span>
     </button>
   `

@@ -21,6 +21,7 @@
     <meta property="og:image" content="https://example.com/media/teacher.JPG" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="image" href="/media/teacher.JPG" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -397,15 +398,14 @@
       >
         <video
           id="cover-video"
-          class="absolute inset-0 h-full w-full object-cover"
+          class="absolute inset-0 h-full w-full object-cover bg-[var(--color-surface)]"
           autoplay
           muted
           loop
           playsinline
-          poster="/media/team_dancing.JPG"
-        >
-          <source src="/media/video/team.mp4" type="video/mp4" />
-        </video>
+          preload="none"
+          aria-label="Видео со съёмки группы"
+        ></video>
         <div
           class="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)] via-[var(--color-bg)]/55 to-transparent"
           aria-hidden="true"
